@@ -47,7 +47,7 @@ If your type extends AIDLObject, you can pass your type or its inheritors direct
 
 Installation
 ============
-For now, grab simple-aidl-objects.jar from the bin folder, and add it to your Android project's build path. That's it!
+For now, grab <b>simple-aidl-objects.jar</b> from root, and add it to your Android project's build path. <b>That's it!</b>
 
 Usage
 =====
