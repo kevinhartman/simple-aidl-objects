@@ -330,3 +330,5 @@ The explicit casting means that it's possible to pass particular AIDLBundler and
 ##Not so Standard Reflection
 Because this library uses some less than standard reflection in order to make your life so simple, there's a possiblity that it may not work with particular versions of Android. It is currently tested only on Android 4.0.3, but it's <b>very</b> likely that it should work just fine on most modern versions of Android (assuming AIDL support). Test it out and let me know! If there are problems for a specific version of Android that you'd like to use, let me know about that too, and I'll do my best to get it working.
 
+##Current Development State
+Simple AIDL Objects is in a useable state. That said, more testing is underway, so it is possible that there may be changes. Currently, source lacks proper documentation, and is in the process of a clean-up. That is all.
