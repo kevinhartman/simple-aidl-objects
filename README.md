@@ -18,17 +18,11 @@ Methods that can be defined in an AIDL service (ex. a method within IPotatoSalad
 * Implement Parcelable in the type's class (implementing all of its required methods, of course)
 * Define a static CREATOR field with a Creator object that requires a concrete implementation, which must be set up as well...
 
-That's a lot of complication, and doesn't really get you very far at all.
-
-<b>The reason I say that last bit is this.</b>
-
-The type you've just done all of that setup for is literally the <i>only</i> type you've done all of that setup for: There's no inheritance. So as for design patterns like the Strategy Pattern and Template Method Pattern across processes? Boink. Off the table. Gone. Bye-bye. ...Until now! But I'll get to that.
-
-The reason that inheritance doesn't work as expected is something you would encounter when setting up that CREATOR required your type without this library. In short, if you shuttle data across the IPC boundary, you must put it together in the form of an object on the other side. If you don't know which concrete implementation class to use, you're screwed. Hence interfaces can not be used as AIDL service method types, by default.
+That's a lot of complication.
 
 Solution
 ========
-Simple AIDL Objects can solve all of these problems!
+Simple AIDL Objects!
 
 ##How it Simplifies:
 This is Java. We shouldn't have to bend over backwards to satisfy requirements that the compiler doesn't even know about. This library hides that ugliness from the developer and won't spring any responsibilities on you that your compiler won't tell you about. 
@@ -39,7 +33,6 @@ This is Java. We shouldn't have to bend over backwards to satisfy requirements t
 Done.
 
 ##How it Handles Inheritance:
-<b>AIDL by default <i>doesn't</i>. Simple AIDL Objects does, completely!</b>
 
 If your type implements AIDLBundleable, all you need to do is instantiate a new AIDLBundler with your type object as a parameter (whether it be an interface or concrete class) and pass the AIDLBundler to your AIDL service's methods. 
 
@@ -48,6 +41,7 @@ If your type extends AIDLObject, you can pass your type or its inheritors direct
 Installation
 ============
 For now, grab <b>simple-aidl-objects.jar</b> from root, and add it to your Android project's build path. <b>That's it!</b>
+<i>Note that this is a research project and is <b>not meant for production.</b></i> See my blog for a safer approach to inheritance over AIDL, if that's why you're here ;)
 
 Usage
 =====
@@ -331,4 +325,6 @@ The explicit casting means that it's possible to pass particular AIDLBundler and
 Because this library uses some less than standard reflection in order to make your life so simple, there's a possiblity that it may not work with particular versions of Android. It is currently tested only on Android 4.0.3, but it's <b>very</b> likely that it should work just fine on most modern versions of Android (assuming AIDL support). Test it out and let me know! If there are problems for a specific version of Android that you'd like to use, let me know about that too, and I'll do my best to get it working.
 
 ##Current Development State
-Simple AIDL Objects is in a useable state, but not a production state. More testing is underway, so it is possible that there may be changes. If you're planning on using Simple AIDL Objects in production code, consider <i>holding off for the current moment</i>. The only reason I say this is that exposing AIDL interfaces for your services to other applications is a big deal: You must always maintain support for your initial implementation, as to not break any other applications that depend on your service being compatible with an older version. Allow a little time for testing (and take part in testing, please! I could really use your help!) and when I feel that Simple AIDL Objects is production ready, I'll remove this warning. Also, currently, source lacks proper documentation, and is in the process of a clean-up. That is all.
+Simple AIDL Objects is in a useable state, but <b>not a production state</b>. If you're planning on using Simple AIDL Objects in production code because you're interested in doing inheritance over IPC, check out my blog post describing a safer way to do so using AIDL and Serializables. If you're still interested, I'm not stopping you. This is pretty cool code, and I'll certainly do my best to fix bugs that people may find in it / add support for other Android versions if I find out that this isn't working on everything. Remember: exposing AIDL interfaces for your services to other applications is a big deal. You must always maintain support for your initial implementation, as to not break any other applications that depend on your service being compatible with an older version. That said, consider first trying the approach described on my blog.
+
+Also, currently, source lacks proper documentation, and is in the process of a clean-up. That is all.
