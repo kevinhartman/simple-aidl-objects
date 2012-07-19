@@ -5,6 +5,13 @@ Provides a simpler approach to declaring and using AIDL objects for IPC on Andro
 
 by Kevin Hartman
 
+Disclaimer
+==========
+<b>This is purely a research project, and is not necesarily meant for production.</b> The limitations section does a good job of explaining why this is the case.
+
+If you're looking to implement inheritance over AIDL, I can help you! Check out my blog for a post describing how to go about doing that. Simple AIDL Objects is perfectly capable, but it's probably safest for you to use AIDL and Serializables, which is, again,  described on my blog. * Blog under construction. Check back in a day or two *
+
+I've open-sourced this code because some pretty neat stuff is happening under the hood with reflection and the construction of objects (it's very non-standard). This makes a good example of the type of work I like to do and is something that I can get up quickly for potential employers to see while I continue to work on larger yet-to-be-open-sourced applications.
 
 Preface
 =======
