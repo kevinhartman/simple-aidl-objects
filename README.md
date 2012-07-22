@@ -333,5 +333,3 @@ Because this library uses some less than standard reflection in order to make yo
 
 ##Current Development State
 Simple AIDL Objects is in a useable state, but <b>not a production state</b>. If you're planning on using Simple AIDL Objects in production code because you're interested in doing inheritance over IPC, check out my blog post describing a safer way to do so using AIDL and Serializables. If you're still interested, I'm not stopping you. This is pretty cool code, and I'll certainly do my best to fix bugs that people may find in it / add support for other Android versions if I find out that this isn't working on everything. Remember: exposing AIDL interfaces for your services to other applications is a big deal. You must always maintain support for your initial implementation, as to not break any other applications that depend on your service being compatible with an older version. That said, consider first trying the approach described on my blog.
-
-Also, currently, source lacks proper documentation, and is in the process of a clean-up. That is all.
