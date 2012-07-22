@@ -80,7 +80,6 @@ public abstract class AIDLObject implements Parcelable {
     
     /**
      * Create a new no-args constructor for any class by its name.
-     * any of its constructors.
      * @author Kevin Hartman <kevin@hart.mn>
      * @version 1.0
      *
