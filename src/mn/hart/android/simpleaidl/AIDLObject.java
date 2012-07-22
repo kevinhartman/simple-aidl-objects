@@ -1,22 +1,32 @@
 package mn.hart.android.simpleaidl;
 
-
 import java.lang.reflect.Constructor;
-
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+/**
+ * Packs itself prior to its shuttling across processes, 
+ * and is responsible for orchestrating its own reconstruction
+ * on the other side.
+ * @author Kevin Hartman <kevin@hart.mn>
+ * @version 1.0
+ */
 public abstract class AIDLObject implements Parcelable {
 	
+	/**
+	 * Specify special flags for marshaling process
+	 */
 	public int describeContents() {
         return 0;
     }
 	
 	/**
-	 * Save the implementation's name so it can selected on service-side
-	 * @param out The parcel to parcelify the strategy to
+	 * Write this object's data bundle and save
+	 * that, and its name, in the parcel
+	 * that will be used in reconstruction.
+	 * @param out The parcel in which to save its data.
 	 */
 	public void writeToParcel(Parcel out, int flags) {
 		Bundle instanceData = new Bundle();
@@ -27,12 +37,19 @@ public abstract class AIDLObject implements Parcelable {
     	
     }
 
-
+	/**
+	 * Creator object that the AIDL generated service class
+	 * will be looking for when it's time to recreate this
+	 * AIDLObject on the other side.
+	 */
 	public static final Creator<AIDLObject> CREATOR
             = new Parcelable.Creator<AIDLObject>() {
     	
     	/**
-    	 * Instantiate the desired subclass by name
+    	 * Instantiate the desired AIDLObject subclass by name and provide
+    	 * it with its data bundle.
+    	 * @param in The AIDLObject's data.
+    	 * @return An AIDLObject, or null if error.
     	 */
         public AIDLObject createFromParcel(Parcel in) {
         	String className = in.readString();
@@ -53,11 +70,21 @@ public abstract class AIDLObject implements Parcelable {
         	return null;
         }
 
+        /**
+         * Required by Parcelable
+         */
         public AIDLObject[] newArray(int size) {
             return new AIDLObject[size];
         }
     };
     
+    /**
+     * Create a new no-args constructor for any class by its name.
+     * any of its constructors.
+     * @author Kevin Hartman <kevin@hart.mn>
+     * @version 1.0
+     *
+     */
     private static class AndroidMagicConstructorMaker {
 
     	@SuppressWarnings("unchecked")
@@ -74,8 +101,16 @@ public abstract class AIDLObject implements Parcelable {
     	}
     }
 
+    /**
+     * Set up instance using provided data.
+     * @param instanceData Bundle created by this object before IPC.
+     */
 	protected abstract void contructFromInstanceData(Bundle instanceData);
 	
+	/**
+	 * Write instance data prior to shuttling.
+	 * @param instanceData Bundle in which to write instance data.
+	 */
 	protected abstract void writeInstanceData(Bundle instanceData);
 	
 	
