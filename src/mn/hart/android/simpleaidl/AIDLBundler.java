@@ -81,7 +81,6 @@ public class AIDLBundler implements Parcelable {
     	
     	/**
     	 * Instantiate the desired AIDLBundleable by name and provide
-    	 * it with its data bundle.
     	 * @param in The AIDLBundleable's data.
     	 * @return An AIDLBundler, holding the desired AIDLBundleable or null if error.
     	 */
