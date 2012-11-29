@@ -1,19 +1,20 @@
 Simple AIDL Objects
 ===================
 
-Provides a simpler approach to declaring and using AIDL objects for IPC on Android.
+Simple AIDL Object offers a versatile solution for AIDL-defined methods that need to accept interfaces or superclasses, allowing design patterns to be used more easily across Android services and their clients.
 
 by Kevin Hartman
 
-Disclaimer
-==========
-<b>This is mostly a research project, and is not necesarily meant for production.</b> The limitations section does a good job of explaining why this is the case.
+Disclaimers
+===========
 
-If you're looking to implement inheritance over AIDL without Simple AIDL Objects, I can help you! Check out <a href="http://kevinhartman.github.com/blog/2012/07/23/inheritance-through-ipc-using-aidl-in-android/">my blog</a> for a post describing how to go about doing that. Using the existing framework is messy, but it may offer better support if you're designing a commercial service that many other applications will use.
+* This is my personal approach to enabling AIDL-defined methods to accept interfaces and superclasses as parameters. This is possible without Simple AIDL Objects, but is, in my opinion, a lot messier. If you're looking to implement inheritance over AIDL without Simple AIDL Objects, I can help you! Check out <a href="http://kevinhartman.github.com/blog/2012/07/23/inheritance-through-ipc-using-aidl-in-android/">my blog</a> for a post describing how to go about doing that.
+
+* Simple AIDL Objects does not address the developement concerns that surround an AIDL made interface at all; <b>you're still completely responsible for designing an effective AIDL implementation.</b>
 
 Preface
 =======
-Android provides an interface definition language that developers can use directly in order to create and communicate with a Service, across processes, in a complex way that cannot be suited by using a simple Messenger. Many developers groan at the mention of AIDL- there's a lot of overhead to implementing a safe AIDL solution. Some will say: "rightly so". Maybe the average app-bandwagon developer shouldn't really have a need for AIDL, and might not be qualified to use it. That said, Simple AIDL Objects does not aim to remove that overhead that has naturally kept the careless out. In fact, it doesn't address or even touch the developement of an AIDL made interface at all; you're still completely responsible for designing an effective AIDL implementation.
+Android provides an interface definition language that developers can use directly in order to create and communicate with a Service, across processes, in a complex way that cannot be suited by using a simple Messenger.
 
 Problem
 =======
@@ -327,7 +328,7 @@ This is due to an implementation detail of AIDL itself. Specifically, the class 
 The explicit casting means that it's possible to pass particular AIDLBundler and AIDLObject objects to service methods that should not be allowed to accept them- which will result in a runtime error. With very mild caution, this should be easily avoidable.
 
 ##Not so Standard Reflection
-Because this library uses some less than standard reflection in order to make your life so simple, there's a possiblity that it may not work with particular versions of Android. It is currently tested only on Android 4.0.3, but it's <b>very</b> likely that it should work just fine on most modern versions of Android (assuming AIDL support). Test it out and let me know! If there are problems for a specific version of Android that you'd like to use, let me know about that too, and I'll do my best to get it working.
+Because this library uses some less than standard reflection in order to make your life so simple, there's a possiblity that it may not work with particular versions of Android. It is currently tested only on Android 4.0.3 and 4.1.1, but it's <b>very</b> likely that it should work just fine on all versions of Android. Test it out and let me know! If there are problems for a specific version of Android that you'd like to use, let me know about that too, and I'll do my best to get it working.
 
 ##Current Development State
-Simple AIDL Objects is in a useable state, but <b>not a production state</b>. If you're planning on using Simple AIDL Objects in production code because you're interested in doing inheritance over IPC, check out my blog post describing a safer way to do so using AIDL and Serializables. If you're still interested, I'm not stopping you. This is pretty cool code, and I'll certainly do my best to fix bugs that people may find in it / add support for other Android versions if I find out that this isn't working on everything. Remember: exposing AIDL interfaces for your services to other applications is a big deal. You must always maintain support for your initial implementation, as to not break any other applications that depend on your service being compatible with an older version. That said, consider first trying the approach described on my blog.
+Simple AIDL Objects is in a useable state, but I can't guarantee that I'll continue working on it. I'll do my best to fix bugs that people may find in it / add support for other Android versions if I find out that this isn't working on everything, if I can.
