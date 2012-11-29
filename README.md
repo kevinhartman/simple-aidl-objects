@@ -309,18 +309,12 @@ Limitations
 ===========
 
 ##Explicit Casting
-In both solutions, an explicit cast to your desired type on the Service side is required:
+Using the AIDLBundler and Bundleable interface solution, an explicit cast to your desired type on the Service side is required:
 
-<b>AIDLBundler</b>
+
 `````java
 ...
 YourType type = (YourType) aidlBundler.getBundleable();   // Where YourType implements AIDLBundleable
-`````
-
-<b>AIDLObject</b>
-`````java
-...
-YourType type = (YourType) aidlObject;                    // Where YourType is an AIDLObject
 `````
 
 This is due to an implementation detail of AIDL itself. Specifically, generics are not accounted for in the design of AIDL.
