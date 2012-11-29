@@ -323,7 +323,7 @@ YourType type = (YourType) aidlBundler.getBundleable();   // Where YourType impl
 YourType type = (YourType) aidlObject;                    // Where YourType is an AIDLObject
 `````
 
-This is due to an implementation detail of AIDL itself. Specifically, the class that is generated from the AIDL for the service you define expects a static Creator object for every custom AIDL type you define. Because it is static, its generic type (ex. Creator<<i>AIDLObject</i>>) cannot be changed dynamically (ex. Creator<<i>T</i>> cannot work), and hence you are unable to create different subclass types.
+This is due to an implementation detail of AIDL itself. Specifically, generics are not accounted for in the design of AIDL.
 
 The explicit casting means that it's possible to pass particular AIDLBundler and AIDLObject objects to service methods that should not be allowed to accept them- which will result in a runtime error. With very mild caution, this should be easily avoidable.
 
