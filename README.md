@@ -1,16 +1,15 @@
 Simple AIDL Objects
 ===================
 
-Simple AIDL Object offers a versatile solution for AIDL-defined methods that need to accept interfaces or superclasses, allowing design patterns to be used more easily across Android services and their clients.
+Simple AIDL Objects offers a versatile solution for AIDL-defined methods that need to accept interfaces or superclasses, allowing design patterns to be used more easily across Android services and their clients.
 
 by Kevin Hartman
 
 Disclaimers
 ===========
+* This was just a fun tangent project that I did to work out how I would have wanted Android's AIDL API to look. I don't maintain it, and I don't recommend using it for anything other than science.
 
-* This is my personal approach to enabling AIDL-defined methods to accept interfaces and superclasses as parameters. This is possible without Simple AIDL Objects, but is, in my opinion, a lot messier. If you're looking to implement inheritance over AIDL without Simple AIDL Objects, I can help you! Check out <a href="http://kevinhartman.github.com/blog/2012/07/23/inheritance-through-ipc-using-aidl-in-android/">my blog</a> for a post describing how to go about doing that.
-
-* Simple AIDL Objects does not address the developement concerns that surround an AIDL made interface at all; <b>you're still completely responsible for designing an effective AIDL implementation.</b>
+* This is an interesting approach to enabling AIDL-defined methods to accept interfaces and superclasses as parameters. This is possible without Simple AIDL Objects, but it's a messy solution. <b>For production, you shouldn't use this library.</b> Check out <a href="http://kevinhartman.github.com/blog/2012/07/23/inheritance-through-ipc-using-aidl-in-android/">this blog post</a> which describes how to go about doing that.
 
 Preface
 =======
@@ -28,30 +27,24 @@ That's a lot of complication.
 
 Solution
 ========
-Simple AIDL Objects!
-
 ##How it Simplifies:
-This is Java. We shouldn't have to bend over backwards to satisfy requirements that the compiler doesn't even know about. This library hides that ugliness from the developer and won't spring any responsibilities on you that your compiler won't tell you about. 
 
-* No longer do you need to define a .aidl file for the type. You just do nothing.
+* No longer do you need to define a .aidl file for the type.
 * Just implement AIDLBundleable or extend AIDLObject and define two methods in your new type's class.
-
-Done.
 
 ##How it Handles Inheritance:
 
-If your type implements AIDLBundleable, all you need to do is instantiate a new AIDLBundler with your type object as a parameter (whether it be an interface or concrete class) and pass the AIDLBundler to your AIDL service's methods. 
+If your type implements AIDLBundleable, all you need to do is instantiate a new AIDLBundler with your type object as a parameter and pass the AIDLBundler to your AIDL service's methods. 
 
 If your type extends AIDLObject, you can pass your type or its inheritors directly to your AIDL service's methods, and this library will take care of the rest for you, allowing you to use inheritance naturally.
 
 Installation
 ============
-For now, grab <b>simple-aidl-objects.jar</b> from root, and add it to your Android project's build path. <b>That's it!</b>
-<i>Note that this is a research project and is <b>not meant for production.</b></i> See my blog for a safer approach to inheritance over AIDL, if that's why you're here ;)
+Grab <b>simple-aidl-objects.jar</b> from root, and add it to your Android project's build path.
 
 Usage
 =====
-The examples provided for both solutions are strategy design pattern implementations, because that particular pattern requires simple inheritance and thus makes a good example. That's just one example- you can do anything you normally would with inheritance. In fact, Simple AIDL Objects is meant to be used even when you have no need for inheritance, and simply need to define a simple new type.
+The examples provided for both solutions are strategy design pattern implementations.
 
 ##Interface Solution
 This is an example of how you can use the AIDLBundler solution included within this library to create a new type for use with a Strategy design pattern.
@@ -65,7 +58,7 @@ interface IMyStrategyService {
   void setStrategy(in AIDLBundler strategy);
 }
 `````
-This is the AIDL file associated with your AIDL-using service. This library does not help you skip any steps here. <b>You're fully responsible for implementing a safe Service.</b> All you need to note here is that the method used to set the strategy to use in our service takes an AIDLBundler object.
+This is the AIDL file associated with your AIDL-using service. All you need to note here is that the method used to set the strategy to use in our service takes an AIDLBundler object.
 
 <b>MyStrategy.java:</b>
 `````java
@@ -94,7 +87,8 @@ public class MyConcreteStrategy extends MyStrategy {
    * not required by MyStrategy. We could've constructed this
    * object with whatever we'd wanted. Point is, subclasses
    * of our type can be constructed with variable constructors
-   * that differ from one another. That took me a lot of work.
+   * that differ from one another. Without using serialization,
+   * implementing that was an interesting problem.
    */
   public MyConcreteStrategy(long intervalMillis) {
     this.interval = intervalMillis;
@@ -178,9 +172,6 @@ public class MyStrategyService extends Service {
 Notice how the instance is retrieved from the AIDLBundler. An explicit cast to our interface type is required.
 
 
-And that's it for that one!
-
-
 ##Abstract Class Solution
 This is an example of how you can use the AIDLObject solution included within this library to create a new type for use with a Strategy design pattern. With this option, you're able to use inheritance directly, without the AIDLBundler wrapper. The caveat, however, is that you must extend AIDLObject, rather than just implement AIDLBundleable.
 
@@ -194,7 +185,7 @@ interface IMyStrategyService {
   void setStrategy(in AIDLObject strategy);
 }
 `````
-This is the AIDL file associated with your AIDL-using service. Again, this library does not help you skip any steps here. <b>You're fully responsible for implementing a safe Service.</b> All you need to note here is that the method used to set the strategy to use in our service takes an AIDLObject object, which we will extend later.
+This is the AIDL file associated with your AIDL-using service. All you need to note here is that the method used to set the strategy to use in our service takes an AIDLObject object.
 
 <b>MyStrategy.java:</b>
 `````java
@@ -223,7 +214,8 @@ public class MyConcreteStrategy extends MyStrategy {
    * not required by MyStrategy. We could've constructed this
    * object with whatever we'd wanted. Point is, subclasses
    * of our type can be constructed with variable constructors
-   * that differ from one another. That took me a lot of work.
+   * that differ from one another. Without using serialization,
+   * implementing that was an interesting problem.
    */
   public MyConcreteStrategy(long intervalMillis) {
     this.interval = intervalMillis;
@@ -250,7 +242,6 @@ public class MyConcreteStrategy extends MyStrategy {
   }
 }
 `````
-This is a concrete strategy that happens to take a parameter of type long in its constructor. As noted in the comments within the actual code, constructors take whatever you'd like as parameters. Just like they would if you weren't implementing your strategy pattern over AIDL.
 
 <b>MyStrategyActivity.java:</b>
 `````java
@@ -271,7 +262,6 @@ package mn.hart.example;
 ...
 
 `````
-Notice how the strategy is set simply as a concrete strategy, just as one would expect in a strategy pattern that was not facilitated using AIDL. A particular concrete strategy is passed, but we could've passed any concrete strategy that we'd wanted.
 
 <b>MyStrategyService.java:</b>
 `````java
@@ -317,12 +307,12 @@ Using the AIDLBundler and Bundleable interface solution, an explicit cast to you
 YourType type = (YourType) aidlBundler.getBundleable();   // Where YourType implements AIDLBundleable
 `````
 
-This is due to an implementation detail of AIDL itself. Specifically, generics are not accounted for in the design of AIDL.
+This is due to an implementation detail of AIDL itself. Specifically, generics were not accounted for in the design of AIDL.
 
 The explicit casting means that it's possible to pass particular AIDLBundler and AIDLObject objects to service methods that should not be allowed to accept them- which will result in a runtime error. With very mild caution, this should be easily avoidable.
 
 ##Not so Standard Reflection
-Because this library uses some less than standard reflection in order to make your life so simple, there's a possiblity that it may not work with particular versions of Android. It is currently tested only on Android 4.0.3 and 4.1.1, but it's <b>very</b> likely that it should work just fine on all versions of Android. Test it out and let me know! If there are problems for a specific version of Android that you'd like to use, let me know about that too, and I'll do my best to get it working.
+Because this library uses some less than standard reflection in order to make your life so simple, there's a possiblity that it may not work with particular versions of Android. It is currently tested only on Android 4.0.3 and 4.1.1.
 
 ##Current Development State
-Simple AIDL Objects is in a useable state, but I can't guarantee that I'll continue working on it. I'll do my best to fix bugs that people may find in it / add support for other Android versions if I find out that this isn't working on everything, if I can.
+Simple AIDL Objects is in a useable state, but it was just a fun tangent project.
